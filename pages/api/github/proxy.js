@@ -8,6 +8,9 @@ const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN,
 });
 
+// Export octokit for direct usage in other modules
+export { octokit };
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
