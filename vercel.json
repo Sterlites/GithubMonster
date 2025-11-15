@@ -1,0 +1,32 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "frontend/index.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "backend/api/**/*.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/github/(.*)",
+      "dest": "/backend/api/github/proxy.js"
+    },
+    {
+      "src": "/api/tools/(.*)",
+      "dest": "/backend/api/tools/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/frontend/$1",
+      "check": true
+    }
+  ],
+  "env": {
+    "GITHUB_TOKEN": "@github-token",
+    "GEMINI_API_KEY": "@gemini-api-key"
+  }
+}

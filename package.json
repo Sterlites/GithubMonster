@@ -1,0 +1,38 @@
+{
+  "name": "repoinsights",
+  "version": "1.0.0",
+  "description": "AI-powered repository analysis tools",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "keywords": ["github", "ai", "analysis", "repository"],
+  "author": "RepoInsights",
+  "license": "MIT",
+  "dependencies": {
+    "@octokit/rest": "^20.0.0",
+    "next": "^14.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "google-generative-ai": "^0.1.3",
+    "simple-git": "^3.20.0",
+    "@babel/parser": "^7.23.0",
+    "tree-sitter": "^0.20.0",
+    "ioredis": "^5.3.0",
+    "pg": "^8.11.0",
+    "joi": "^17.11.0",
+    "winston": "^3.11.0",
+    "prom-client": "^15.1.0",
+    "express-rate-limit": "^7.1.0",
+    "rate-limit-redis": "^3.0.2",
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.2.0",
+    "typescript": "^5.0.0"
+  }
+}
