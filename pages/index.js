@@ -443,28 +443,124 @@ export default function Home() {
             document.getElementById('repoPath').textContent = repo;
             currentRepo = repo;
 
-            // In a real implementation, you would call actual API endpoints
-            // For now, we'll simulate the result
-            setTimeout(() => {
-              // Update stats
-              document.getElementById('loc').textContent = (Math.floor(Math.random() * 50000) + 5000).toLocaleString();
-              document.getElementById('contrib').textContent = Math.floor(Math.random() * 100) + 10;
-              document.getElementById('health').textContent = Math.floor(Math.random() * 30) + 70;
-              document.getElementById('age').textContent = Math.floor(Math.random() * 3000) + 100;
-              document.getElementById('stars').textContent = (Math.floor(Math.random() * 50000) + 500).toLocaleString();
-              document.getElementById('forks').textContent = (Math.floor(Math.random() * 5000) + 50).toLocaleString();
-              document.getElementById('issues').textContent = Math.floor(Math.random() * 500);
-              document.getElementById('watchers').textContent = Math.floor(Math.random() * 500);
+            // Call the backend API to get repository statistics
+            const response = await fetch('/api/repo-stats', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                repo: repo,
+                timeRange: '3m',
+                includeIssues: true,
+                includePRs: true
+              })
+            });
 
-              // Reset button
-              btn.innerHTML = '<span>⚡</span><span>Analyze</span>';
-              btn.disabled = false;
-            }, 1500);
+            if (!response.ok) {
+              throw new Error(`API call failed: ${response.status} ${response.statusText}`);
+            }
+
+            const data = await response.json();
+
+            // Update stats with real data from API
+            document.getElementById('loc').textContent = data.linesOfCode.toLocaleString();
+            document.getElementById('contrib').textContent = data.contributors;
+            document.getElementById('health').textContent = data.healthScore;
+            document.getElementById('age').textContent = data.ageInDays;
+            document.getElementById('stars').textContent = data.stars.toLocaleString();
+            document.getElementById('forks').textContent = data.forks.toLocaleString();
+            document.getElementById('issues').textContent = data.openIssues;
+            document.getElementById('watchers').textContent = data.watchers;
+
+            // Add language breakdown visualization if available
+            if (data.languageBreakdown) {
+              renderLanguageBreakdown(data.languageBreakdown);
+            }
+
+            // Reset button
+            btn.innerHTML = '<span>⚡</span><span>Analyze</span>';
+            btn.disabled = false;
 
           } catch (error) {
             showError(error.message);
             btn.innerHTML = '<span>⚡</span><span>Analyze</span>';
             btn.disabled = false;
+          }
+        }
+
+        function renderLanguageBreakdown(languages) {
+          // Calculate total bytes across all languages
+          const totalBytes = Object.values(languages).reduce((sum, bytes) => sum + bytes, 0);
+
+          // Define colors for common languages (could be expanded)
+          const languageColors = {
+            'JavaScript': '#f1e05a',
+            'Python': '#3572A5',
+            'Java': '#b07219',
+            'TypeScript': '#2b7489',
+            'HTML': '#e34c26',
+            'CSS': '#563d7c',
+            'PHP': '#4F5D95',
+            'Ruby': '#701516',
+            'C++': '#f34b7d',
+            'C': '#555555',
+            'Shell': '#89e051',
+            'C#': '#178600',
+            'Go': '#00ADD8',
+            'Swift': '#ffac45',
+            'Rust': '#dea584',
+            'Kotlin': '#F18E33',
+            'Scala': '#c22d40',
+            'R': '#198ce7',
+            'Dart': '#00B4AB',
+            'Elixir': '#6e4a7e',
+            'Vue': '#41b883',
+            'Svelte': '#ff3e00'
+          };
+
+          // Get language names and sort by size
+          const sortedLanguages = Object.entries(languages)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5); // Top 5 languages
+
+          // Create the language breakdown visualization
+          const langBar = document.getElementById('langBar');
+          const langLegend = document.getElementById('langLegend');
+          langBar.innerHTML = '';
+          langLegend.innerHTML = '';
+
+          if (sortedLanguages.length > 0) {
+            // Create the bar
+            sortedLanguages.forEach(([lang, bytes]) => {
+              const percentage = (bytes / totalBytes) * 100;
+              const segment = document.createElement('div');
+              segment.className = 'lang-segment';
+              segment.style.width = `${percentage}%`;
+              segment.style.backgroundColor = languageColors[lang] || '#888888'; // Default color if not defined
+              segment.title = `${lang}: ${percentage.toFixed(1)}%`;
+              langBar.appendChild(segment);
+            });
+
+            // Create the legend
+            sortedLanguages.forEach(([lang, bytes]) => {
+              const percentage = (bytes / totalBytes) * 100;
+              const langItem = document.createElement('div');
+              langItem.className = 'lang-item';
+
+              const langDot = document.createElement('div');
+              langDot.className = 'lang-dot';
+              langDot.style.backgroundColor = languageColors[lang] || '#888888';
+
+              const langText = document.createElement('span');
+              langText.textContent = `${lang} ${percentage.toFixed(1)}%`;
+
+              langItem.appendChild(langDot);
+              langItem.appendChild(langText);
+              langLegend.appendChild(langItem);
+            });
+          } else {
+            langBar.textContent = 'No language data available';
           }
         }
 
