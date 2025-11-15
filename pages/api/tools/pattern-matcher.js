@@ -1,8 +1,8 @@
-import { validate, schemas } from '../../../backend/utils/validation';
-import { getCached, setCache, generateCacheKey } from '../../../backend/utils/cache';
-import logger, { logRequest, logError, logToolUsage } from '../../../backend/utils/logger';
-import { analyzeWithGemini } from '../../../backend/services/ai/llm-client';
-import { sanitizeOutput } from '../../../backend/utils/security';
+import { validate, schemas } from '../../utils/validation';
+import { getCached, setCache, generateCacheKey } from '../../utils/cache';
+import logger, { logRequest, logError, logToolUsage } from '../../utils/logger';
+import { analyzeWithGemini } from '../services/ai/llm-client';
+import { sanitizeOutput } from '../../utils/security';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
