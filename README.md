@@ -1,13 +1,13 @@
-# RepoInsights - AI-Powered Repository Analysis Tools
+# GithubMonster - AI-Powered Repository Analysis Tools
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Vercel](https://img.shields.io/badge/Powered%20by-Vercel-000000?logo=vercel&logoColor=white)](https://vercel.com)
 
-RepoInsights is a comprehensive suite of 12 AI-powered tools that analyze GitHub repositories to provide deep insights into code quality, architecture, team dynamics, and business impact. The backend provides REST APIs that transform complex technical data into actionable insights for developers, managers, and stakeholders.
+GithubMonster is a comprehensive suite of 12 AI-powered tools that analyze GitHub repositories to provide deep insights into code quality, architecture, team dynamics, and business impact. The backend provides REST APIs that transform complex technical data into actionable insights for developers, managers, and stakeholders.
 
 ## 🚀 Demo
 
-Check out the live frontend at: [repoinsights.vercel.app](https://repoinsights.vercel.app)
+Check out the live frontend at: [githubmonster.vercel.app](https://githubmonster.vercel.app)
 
 ## ✨ Features
 
@@ -54,8 +54,8 @@ Check out the live frontend at: [repoinsights.vercel.app](https://repoinsights.v
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/repoinsights.git
-   cd repoinsights
+   git clone https://github.com/your-username/githubmonster.git
+   cd githubmonster
    ```
 
 2. **Install dependencies**
@@ -87,7 +87,7 @@ The application will be available at `http://localhost:3000`
 
 ### Deploy to Vercel
 
-[![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/your-username/repoinsights)
+[![Deploy to Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/your-username/githubmonster)
 
 1. Push your code to GitHub
 2. Go to [Vercel](https://vercel.com) and import your repository
@@ -150,7 +150,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 If you encounter any issues or have questions:
 
-1. Check the [Issues](https://github.com/your-username/repoinsights/issues) page
+1. Check the [Issues](https://github.com/your-username/githubmonster/issues) page
 2. Create a new issue with:
    - Tool name
    - Error message
