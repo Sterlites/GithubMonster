@@ -1,8 +1,8 @@
-import { validate, schemas } from '../../utils/validation';
-import { getCached, setCache, generateCacheKey } from '../../utils/cache';
-import logger, { logRequest, logError, logToolUsage } from '../../utils/logger';
-import { analyzeWithGemini } from '../services/ai/llm-client';
-import { sanitizeOutput } from '../../utils/security';
+import { validate, schemas } from '../../../utils/validation';
+import { getCached, setCache, generateCacheKey } from '../../../utils/cache';
+import logger, { logRequest, logError, logToolUsage } from '../../../utils/logger';
+import { analyzeWithGemini } from '../../../services/ai/llm-client';
+import { sanitizeOutput } from '../../../utils/security';
 import { octokit } from '../github/proxy';
 
 export default async function handler(req, res) {
