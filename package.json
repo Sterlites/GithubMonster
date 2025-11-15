@@ -1,5 +1,5 @@
 {
-  "name": "repoinsights",
+  "name": "githubmonster",
   "version": "1.0.0",
   "description": "AI-powered repository analysis tools",
   "main": "index.js",
@@ -10,7 +10,7 @@
     "lint": "next lint"
   },
   "keywords": ["github", "ai", "analysis", "repository"],
-  "author": "RepoInsights",
+  "author": "GithubMonster",
   "license": "MIT",
   "dependencies": {
     "@octokit/rest": "^20.0.0",
@@ -26,13 +26,15 @@
     "joi": "^17.11.0",
     "winston": "^3.11.0",
     "prom-client": "^15.1.0",
-    "express-rate-limit": "^7.1.0",
+    "express-rate-limit": "^6.11.2",
     "rate-limit-redis": "^3.0.2",
-    "axios": "^1.6.0"
+    "axios": "^1.6.0",
+    "node-cache": "^5.1.2"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@types/react": "^18.2.0",
+    "@types/redis": "^4.0.10",
     "typescript": "^5.0.0"
   }
 }

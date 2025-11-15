@@ -1,5 +1,8 @@
 import { Octokit } from "@octokit/rest";
 
+// Note: This file is copied to pages/api/github/proxy.js for Next.js
+// The actual implementation is in backend/api/github/proxy.js
+
 // Create a single instance of Octokit
 const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN,
