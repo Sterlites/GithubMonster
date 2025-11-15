@@ -24,9 +24,5 @@
       "dest": "/frontend/$1",
       "check": true
     }
-  ],
-  "env": {
-    "GITHUB_TOKEN": "@github_token",
-    "GEMINI_API_KEY": "@gemini-api-key"
-  }
+  ]
 }
