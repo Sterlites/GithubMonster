@@ -458,7 +458,7 @@ export default function Home() {
             });
 
             if (!response.ok) {
-              throw new Error(`API call failed: ${response.status} ${response.statusText}`);
+              throw new Error('API call failed: ' + response.status + ' ' + response.statusText);
             }
 
             const data = await response.json();
@@ -536,9 +536,9 @@ export default function Home() {
               const percentage = (bytes / totalBytes) * 100;
               const segment = document.createElement('div');
               segment.className = 'lang-segment';
-              segment.style.width = `${percentage}%`;
+              segment.style.width = percentage + '%';
               segment.style.backgroundColor = languageColors[lang] || '#888888'; // Default color if not defined
-              segment.title = `${lang}: ${percentage.toFixed(1)}%`;
+              segment.title = lang + ': ' + percentage.toFixed(1) + '%';
               langBar.appendChild(segment);
             });
 
@@ -553,7 +553,7 @@ export default function Home() {
               langDot.style.backgroundColor = languageColors[lang] || '#888888';
 
               const langText = document.createElement('span');
-              langText.textContent = `${lang} ${percentage.toFixed(1)}%`;
+              langText.textContent = lang + ' ' + percentage.toFixed(1) + '%';
 
               langItem.appendChild(langDot);
               langItem.appendChild(langText);
@@ -643,7 +643,7 @@ export default function Home() {
             });
 
             if (!response.ok) {
-              throw new Error(\`API call failed: \${response.status} \${response.statusText}\`);
+              throw new Error('API call failed: ' + response.status + ' ' + response.statusText);
             }
 
             const result = await response.json();
