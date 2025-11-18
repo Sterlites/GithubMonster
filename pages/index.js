@@ -417,16 +417,27 @@ export default function Home() {
           await runAnalysis(repo);
         }
 
-        async function runAnalysis(repo) {
-          if (!repo) {
+        async function runAnalysis(inputRepo) {
+          if (!inputRepo) {
             showError('Please enter a repository');
             return;
+          }
+
+          // Parse repository from URL or owner/repo format
+          let repo = inputRepo.trim();
+          
+          // If it's a full GitHub URL, extract owner/repo
+          if (repo.includes('github.com')) {
+            const urlMatch = repo.match(/github\\.com\\/([a-zA-Z0-9_.-]+)\\/([a-zA-Z0-9_.-]+)/);
+            if (urlMatch) {
+              repo = urlMatch[1] + '/' + urlMatch[2];
+            }
           }
 
           // Validate repository format
           const repoPattern = /^[a-zA-Z0-9_.-]+\\/[a-zA-Z0-9_.-]+$/;
           if (!repoPattern.test(repo)) {
-            showError('Invalid repository format. Please use owner/repo format (e.g., facebook/react)');
+            showError('Invalid repository format. Please use owner/repo format (e.g., facebook/react) or paste a GitHub URL');
             return;
           }
 
