@@ -241,6 +241,7 @@ export default function Home() {
                 <li className="insight-item"><div className="insight-icon">🔄</div><div className="insight-content"><div className="insight-title">Auth System Redesign</div><div className="insight-description">Needs git commit analysis + PR parsing</div></div></li>
                 <li className="insight-item"><div className="insight-icon">💾</div><div className="insight-content"><div className="insight-title">Database Migration</div><div className="insight-description">Requires issue tracking integration</div></div></li>
               </ul>
+              <div className="tool-result" id="result-archaeology" style={{display: 'none', marginTop: '1.5rem', padding: '1rem', background: 'rgba(0,0,0,0.2)', borderRadius: '12px'}}></div>
               <div className="tool-actions"><button className="btn btn-primary" onClick={() => showToolModal('archaeology')}>🔍 Run Tool</button><button className="btn btn-secondary">📊 View Report</button></div>
             </div>
 
@@ -258,6 +259,7 @@ export default function Home() {
                 <li className="insight-item"><div className="insight-icon">✅</div><div className="insight-content"><div className="insight-title">Code Complexity Analysis</div><div className="insight-description">Needs AST parsing + AI ranking</div></div></li>
                 <li className="insight-item"><div className="insight-icon">✅</div><div className="insight-content"><div className="insight-title">Dependency Graph</div><div className="insight-description">Requires module analysis</div></div></li>
               </ul>
+              <div className="tool-result" id="result-learning" style={{display: 'none', marginTop: '1.5rem', padding: '1rem', background: 'rgba(0,0,0,0.2)', borderRadius: '12px'}}></div>
               <div className="tool-actions"><button className="btn btn-primary" onClick={() => showToolModal('learning')}>🚀 Run Tool</button><button className="btn btn-secondary">📝 View Path</button></div>
             </div>
 
@@ -276,6 +278,7 @@ export default function Home() {
                 <div className="metric"><div className="metric-value" style={{color:"var(--warning)"}}>ML</div><div className="metric-label">Cost Model</div></div>
                 <div className="metric"><div className="metric-value" style={{color:"var(--success)"}}>AI</div><div className="metric-label">ROI Calc</div></div>
               </div>
+              <div className="tool-result" id="result-debt" style={{display: 'none', marginTop: '1.5rem', padding: '1rem', background: 'rgba(0,0,0,0.2)', borderRadius: '12px'}}></div>
               <div className="tool-actions"><button className="btn btn-primary" onClick={() => showToolModal('debt')}>📈 Run Tool</button><button className="btn btn-secondary">💡 View ROI</button></div>
             </div>
 
@@ -294,6 +297,7 @@ export default function Home() {
                 <div className="metric"><div className="metric-value" style={{color:"var(--primary)"}}>AST</div><div className="metric-label">Parser</div></div>
                 <div className="metric"><div className="metric-value" style={{color:"var(--success)"}}>ML</div><div className="metric-label">Impact</div></div>
               </div>
+              <div className="tool-result" id="result-blast" style={{display: 'none', marginTop: '1.5rem', padding: '1rem', background: 'rgba(0,0,0,0.2)', borderRadius: '12px'}}></div>
               <div className="tool-actions"><button className="btn btn-primary" onClick={() => showToolModal('blast')}>🎯 Run Tool</button><button className="btn btn-secondary">📋 View Impact</button></div>
             </div>
 
@@ -313,6 +317,7 @@ export default function Home() {
                 <div className="metric"><div className="metric-value" style={{color:"var(--warning)"}}>85</div><div className="metric-label">Collab</div></div>
                 <div className="metric"><div className="metric-value" style={{color:"var(--secondary)"}}>78</div><div className="metric-label">Docs</div></div>
               </div>
+              <div className="tool-result" id="result-health" style={{display: 'none', marginTop: '1.5rem', padding: '1rem', background: 'rgba(0,0,0,0.2)', borderRadius: '12px'}}></div>
               <div className="tool-actions"><button className="btn btn-primary" onClick={() => showToolModal('health')}>📊 Run Tool</button><button className="btn btn-secondary">📋 View Full</button></div>
             </div>
 
@@ -330,6 +335,7 @@ export default function Home() {
                 <li className="insight-item"><div className="insight-icon">📝</div><div className="insight-content"><div className="insight-title">Documentation</div><div className="insight-description">Worth 2.5x regular commits</div></div></li>
                 <li className="insight-item"><div className="insight-icon">🔍</div><div className="insight-content"><div className="insight-title">Code Reviews</div><div className="insight-description">Prevents critical bugs</div></div></li>
               </ul>
+              <div className="tool-result" id="result-equity" style={{display: 'none', marginTop: '1.5rem', padding: '1rem', background: 'rgba(0,0,0,0.2)', borderRadius: '12px'}}></div>
               <div className="tool-actions"><button className="btn btn-primary" onClick={() => showToolModal('equity')}>🔍 Run Tool</button><button className="btn btn-secondary">🏆 View Scores</button></div>
             </div>
           </div>
@@ -519,6 +525,9 @@ export default function Home() {
             btn.innerHTML = '<span>⚡</span><span>Analyze</span>';
             btn.disabled = false;
 
+            // Automatically run all tools
+            runAllTools(repo);
+
           } catch (error) {
             showError(error.message);
             btn.innerHTML = '<span>⚡</span><span>Analyze</span>';
@@ -619,26 +628,41 @@ export default function Home() {
           document.getElementById('landing').classList.remove('hidden');
         }
 
-        async function showToolModal(tool) {
-          if (!currentRepo) {
-            alert('Please enter a repository first');
+        async function runAllTools(repo) {
+          const toolKeys = Object.keys(tools);
+          // Run tools sequentially to avoid overwhelming the server/browser
+          for (const tool of toolKeys) {
+            runTool(tool, repo);
+            // Small delay between starts
+            await new Promise(r => setTimeout(r, 500));
+          }
+        }
+
+        async function runTool(tool, repoOverride) {
+          const repo = repoOverride || currentRepo;
+          if (!repo) {
+            if (!repoOverride) alert('Please enter a repository first');
             return;
           }
 
           const toolInfo = tools[tool];
-          if (!toolInfo) {
-            alert('Unknown tool: ' + tool);
-            return;
-          }
+          if (!toolInfo) return;
 
           const endpoint = toolInfo.endpoint;
+          const resultContainer = document.getElementById('result-' + tool);
+          const runBtn = document.querySelector(\`[data-tool="\${tool}"] .btn-primary\`);
+          
+          if (!resultContainer) return;
 
           try {
             // Show loading state
-            const button = event.target;
-            const originalText = button.innerHTML;
-            button.innerHTML = '<span class="loading-spinner"></span><span>Running</span>';
-            button.disabled = true;
+            if (runBtn) {
+              runBtn.innerHTML = '<span class="loading-spinner"></span><span>Running</span>';
+              runBtn.disabled = true;
+            }
+            
+            resultContainer.style.display = 'block';
+            resultContainer.innerHTML = '<div style="display:flex;align-items:center;gap:0.5rem"><span class="loading-spinner"></span><span>Analyzing repository...</span></div>';
 
             // Call the API
             const response = await fetch(endpoint, {
@@ -647,7 +671,7 @@ export default function Home() {
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                repo: currentRepo,
+                repo: repo,
                 // Add common parameters for each tool type
                 ...(tool === 'health' && {
                   includeTeamMetrics: true,
@@ -685,19 +709,78 @@ export default function Home() {
 
             const result = await response.json();
 
-            // Show a modal with results (simplified implementation)
-            alert('Successfully ran ' + toolInfo.name + '!\\n\\nResponse preview:\\n' + JSON.stringify(result, null, 2).substring(0, 200) + '...');
+            // Render results
+            renderToolResult(tool, result);
 
           } catch (error) {
-            alert('Error running ' + toolInfo.name + ': ' + error.message);
             console.error('API call failed:', error);
+            resultContainer.innerHTML = \`<div class="error-msg show" style="display:block">Error: \${error.message}</div>\`;
           } finally {
             // Restore button state
-            const button = event.target;
-            button.innerHTML = originalText;
-            button.disabled = false;
+            if (runBtn) {
+              runBtn.innerHTML = '<span>🔄</span><span>Re-run</span>';
+              runBtn.disabled = false;
+            }
           }
         }
+
+        function renderToolResult(tool, data) {
+          const container = document.getElementById('result-' + tool);
+          if (!container) return;
+
+          let html = '';
+          
+          if (tool === 'archaeology') {
+            if (data.keyDecisions && data.keyDecisions.length > 0) {
+              html += '<h4 style="margin-bottom:0.5rem">Key Architectural Decisions</h4><ul class="insight-list">';
+              data.keyDecisions.forEach(d => {
+                html += \`<li class="insight-item" style="flex-direction:column;align-items:flex-start">
+                  <div class="insight-title">\${d.decision}</div>
+                  <div class="insight-description">\${d.rationale}</div>
+                  <div style="margin-top:0.5rem;font-size:0.8rem;color:var(--primary)">Outcome: \${d.outcome}</div>
+                </li>\`;
+              });
+              html += '</ul>';
+            } else {
+              html = '<p>No architectural decisions found.</p>';
+            }
+          } 
+          else if (tool === 'health') {
+            html = \`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+              <div style="font-size:2rem;font-weight:bold;color:\${data.overallScore > 80 ? 'var(--success)' : 'var(--warning)'}">\${data.overallScore}/100</div>
+              <div style="text-align:right;font-size:0.9rem;color:var(--text-secondary)">Overall Health</div>
+            </div>\`;
+            
+            if (data.breakdown) {
+              html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem">';
+              Object.entries(data.breakdown).forEach(([key, value]) => {
+                html += \`<div style="background:var(--bg-medium);padding:0.5rem;border-radius:8px">
+                  <div style="font-size:0.8rem;text-transform:capitalize">\${key.replace(/([A-Z])/g, ' $1').trim()}</div>
+                  <div style="font-weight:bold;color:var(--primary)">\${value.score}</div>
+                </div>\`;
+              });
+              html += '</div>';
+            }
+          }
+          else if (tool === 'debt') {
+             // Assuming debt returns some cost or hours
+             html = '<div style="display:flex;flex-direction:column;gap:0.5rem">';
+             if (data.technicalDebtScore) html += \`<div><strong>Debt Score:</strong> \${data.technicalDebtScore}</div>\`;
+             if (data.estimatedFixTime) html += \`<div><strong>Est. Fix Time:</strong> \${data.estimatedFixTime}</div>\`;
+             html += '</div>';
+             // Fallback to JSON if specific fields missing
+             if (!data.technicalDebtScore) html = \`<pre style="overflow:auto;max-height:200px;font-size:0.8rem;background:var(--bg-dark);padding:0.5rem;border-radius:8px">\${JSON.stringify(data, null, 2)}</pre>\`;
+          }
+          else {
+            // Generic JSON view
+            html = \`<pre style="overflow:auto;max-height:200px;font-size:0.8rem;background:var(--bg-dark);padding:0.5rem;border-radius:8px">\${JSON.stringify(data, null, 2)}</pre>\`;
+          }
+          
+          container.innerHTML = html;
+        }
+
+        // Expose runTool globally so buttons still work
+        window.showToolModal = (tool) => runTool(tool);
       `}} />
     </div>
   );
