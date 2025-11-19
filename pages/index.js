@@ -418,26 +418,51 @@ export default function Home() {
           await runAnalysis(repo);
         }
 
+        function extractRepoFromInput(input) {
+          input = input.trim();
+          
+          // Handle owner/repo format directly
+          const simpleRepoPattern = /^[a-zA-Z0-9_.-]+\\/[a-zA-Z0-9_.-]+$/;
+          if (simpleRepoPattern.test(input)) {
+            return input;
+          }
+
+          try {
+            // Try to parse as URL
+            let urlStr = input;
+            if (!urlStr.startsWith('http://') && !urlStr.startsWith('https://')) {
+              urlStr = 'https://' + urlStr;
+            }
+            
+            const url = new URL(urlStr);
+            if (url.hostname.includes('github.com')) {
+              const parts = url.pathname.split('/').filter(Boolean);
+              if (parts.length >= 2) {
+                const owner = parts[0];
+                let repo = parts[1];
+                // Remove .git suffix if present
+                if (repo.endsWith('.git')) {
+                  repo = repo.slice(0, -4);
+                }
+                return owner + '/' + repo;
+              }
+            }
+          } catch (e) {
+            // Not a valid URL, ignore
+          }
+          
+          return null;
+        }
+
         async function runAnalysis(inputRepo) {
           if (!inputRepo) {
             showError('Please enter a repository');
             return;
           }
 
-          // Parse repository from URL or owner/repo format
-          let repo = inputRepo.trim();
-          
-          // If it's a full GitHub URL, extract owner/repo
-          if (repo.includes('github.com')) {
-            const urlMatch = repo.match(/github\\.com\\/([a-zA-Z0-9_.-]+)\\/([a-zA-Z0-9_.-]+)/);
-            if (urlMatch) {
-              repo = urlMatch[1] + '/' + urlMatch[2];
-            }
-          }
+          const repo = extractRepoFromInput(inputRepo);
 
-          // Validate repository format
-          const repoPattern = /^[a-zA-Z0-9_.-]+\\/[a-zA-Z0-9_.-]+$/;
-          if (!repoPattern.test(repo)) {
+          if (!repo) {
             showError('Invalid repository format. Please use owner/repo format (e.g., facebook/react) or paste a GitHub URL');
             return;
           }

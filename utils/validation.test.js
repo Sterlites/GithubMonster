@@ -15,6 +15,16 @@ describe('Validation Utilities', () => {
       expect(result.timeRange).toBe('3m');
     });
 
+    it('should validate repository with dots', () => {
+      const validData = {
+        repo: 'angular/angular.js',
+        timeRange: '3m'
+      };
+
+      const result = validate(schemas.repository, validData);
+      expect(result.repo).toBe('angular/angular.js');
+    });
+
     it('should reject invalid repository format', () => {
       const invalidData = {
         repo: 'invalid-repo-format'

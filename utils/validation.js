@@ -3,7 +3,7 @@ import Joi from 'joi';
 export const schemas = {
   repository: Joi.object({
     repo: Joi.string()
-      .pattern(/^[\w-]+\/[\w-]+$/)
+      .pattern(/^[\w.-]+\/[\w.-]+$/)
       .required()
       .messages({
         'string.pattern.base': 'Repository must be in format owner/repo'
@@ -16,7 +16,7 @@ export const schemas = {
   }),
 
   blastRadius: Joi.object({
-    repo: Joi.string().pattern(/^[\w-]+\/[\w-]+$/).required(),
+    repo: Joi.string().pattern(/^[\w.-]+\/[\w.-]+$/).required(),
     changeType: Joi.string()
       .valid('dependency-update', 'refactor', 'feature')
       .required(),
@@ -28,7 +28,7 @@ export const schemas = {
   }),
 
   learningPath: Joi.object({
-    repo: Joi.string().pattern(/^[\w-]+\/[\w-]+$/).required(),
+    repo: Joi.string().pattern(/^[\w.-]+\/[\w.-]+$/).required(),
     experience: Joi.string()
       .valid('beginner', 'intermediate', 'advanced')
       .required(),
@@ -39,7 +39,7 @@ export const schemas = {
   }),
 
   techDebt: Joi.object({
-    repo: Joi.string().pattern(/^[\w-]+\/[\w-]+$/).required(),
+    repo: Joi.string().pattern(/^[\w.-]+\/[\w.-]+$/).required(),
     analysisDepth: Joi.string()
       .valid('quick', 'standard', 'full')
       .default('standard'),
@@ -48,7 +48,7 @@ export const schemas = {
   }),
 
   healthScore: Joi.object({
-    repo: Joi.string().pattern(/^[\w-]+\/[\w-]+$/).required(),
+    repo: Joi.string().pattern(/^[\w.-]+\/[\w.-]+$/).required(),
     includeTeamMetrics: Joi.boolean().default(true),
     timeRange: Joi.string()
       .valid('1m', '3m', '6m', '1y', 'all')
@@ -56,7 +56,7 @@ export const schemas = {
   }),
 
   contributionEquity: Joi.object({
-    repo: Joi.string().pattern(/^[\w-]+\/[\w-]+$/).required(),
+    repo: Joi.string().pattern(/^[\w.-]+\/[\w.-]+$/).required(),
     timeRange: Joi.string()
       .valid('1m', '3m', '6m', '1y', 'all')
       .default('6m'),
@@ -64,7 +64,7 @@ export const schemas = {
   }),
 
   executiveSummary: Joi.object({
-    repo: Joi.string().pattern(/^[\w-]+\/[\w-]+$/).required(),
+    repo: Joi.string().pattern(/^[\w.-]+\/[\w.-]+$/).required(),
     reportType: Joi.string()
       .valid('weekly', 'monthly', 'quarterly', 'annual')
       .default('quarterly'),
@@ -75,7 +75,7 @@ export const schemas = {
   }),
 
   visualStory: Joi.object({
-    repo: Joi.string().pattern(/^[\w-]+\/[\w-]+$/).required(),
+    repo: Joi.string().pattern(/^[\w.-]+\/[\w.-]+$/).required(),
     storyType: Joi.string()
       .valid('feature', 'bugfix', 'refactor', 'release')
       .required(),
@@ -87,7 +87,7 @@ export const schemas = {
   }),
 
   patternMatcher: Joi.object({
-    repo: Joi.string().pattern(/^[\w-]+\/[\w-]+$/).required(),
+    repo: Joi.string().pattern(/^[\w.-]+\/[\w.-]+$/).required(),
     searchType: Joi.string()
       .valid('architecture', 'implementation', 'antipattern')
       .default('architecture'),
@@ -98,7 +98,7 @@ export const schemas = {
   }),
 
   unusedPotential: Joi.object({
-    repo: Joi.string().pattern(/^[\w-]+\/[\w-]+$/).required(),
+    repo: Joi.string().pattern(/^[\w.-]+\/[\w.-]+$/).required(),
     analysisType: Joi.string()
       .valid('quick', 'standard', 'full')
       .default('standard'),
@@ -106,7 +106,7 @@ export const schemas = {
   }),
 
   compliance: Joi.object({
-    repo: Joi.string().pattern(/^[\w-]+\/[\w-]+$/).required(),
+    repo: Joi.string().pattern(/^[\w.-]+\/[\w.-]+$/).required(),
     standards: Joi.array().items(
       Joi.string().valid('SOC2', 'HIPAA', 'GDPR', 'ISO27001')
     ).min(1).required(),
@@ -114,7 +114,7 @@ export const schemas = {
   }),
 
   chaosPredictor: Joi.object({
-    repo: Joi.string().pattern(/^[\w-]+\/[\w-]+$/).required(),
+    repo: Joi.string().pattern(/^[\w.-]+\/[\w.-]+$/).required(),
     scope: Joi.string()
       .valid('production', 'staging', 'all')
       .default('production'),

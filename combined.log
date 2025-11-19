@@ -19,3 +19,10 @@
 {"level":"info","message":"API key created","name":"Existing Key","service":"githubmonster-api","tier":"pro","timestamp":"2025-11-18T18:37:53.490Z"}
 {"level":"info","message":"API key created","name":"Revocable Key","service":"githubmonster-api","tier":"free","timestamp":"2025-11-18T18:37:53.496Z"}
 {"key":"9ab38c93...","level":"info","message":"API key revoked","service":"githubmonster-api","timestamp":"2025-11-18T18:37:53.500Z"}
+{"level":"info","message":"API key created","name":"Test Key","service":"githubmonster-api","tier":"free","timestamp":"2025-11-19T05:31:56.844Z"}
+{"level":"info","message":"API key created","name":"Free Key","service":"githubmonster-api","tier":"free","timestamp":"2025-11-19T05:31:56.854Z"}
+{"level":"info","message":"API key created","name":"Pro Key","service":"githubmonster-api","tier":"pro","timestamp":"2025-11-19T05:31:56.855Z"}
+{"level":"info","message":"API key created","name":"Verifiable Key","service":"githubmonster-api","tier":"free","timestamp":"2025-11-19T05:31:56.857Z"}
+{"level":"info","message":"API key created","name":"Existing Key","service":"githubmonster-api","tier":"pro","timestamp":"2025-11-19T05:31:56.860Z"}
+{"level":"info","message":"API key created","name":"Revocable Key","service":"githubmonster-api","tier":"free","timestamp":"2025-11-19T05:31:56.863Z"}
+{"key":"0c789b3f...","level":"info","message":"API key revoked","service":"githubmonster-api","timestamp":"2025-11-19T05:31:56.865Z"}
